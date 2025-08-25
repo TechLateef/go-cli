@@ -1,41 +1,27 @@
 package main
 
 import (
-	"flag"
 	"fmt"
+	"go-cli-learning/cmd"
 	"os"
 )
 
 func main() {
 
-	// os.Args holds the cli arguments
-	// os.Args[0] is the program name
-	// os.Args[1...] = user inputs
-
-	args := os.Args
-
-	if len(args) < 2 {
-		fmt.Println("Usage: go run main.go <command>")
+	if len(os.Args) < 2 {
+		fmt.Println("User: go run main.go <command> [options]")
 		return
 	}
 
-	command := args[1] // the first arguemnt after the program name
-
-	switch command {
+	switch os.Args[1] {
+	case "hello":
+		cmd.Hello()
 	case "greet":
-		greetCmd := flag.NewFlagSet("greet", flag.ExitOnError)
-
-		name := greetCmd.String("name", "World", "a name to greet")
-		times := greetCmd.Int("times", 1, "number of times to greet")
-
-		// Parse the flags for "greet"
-		greetCmd.Parse(args[2:])
-		for i := 0; i < *times; i++ {
-			fmt.Printf("Hello, %s! 🎉\n", *name)
-		}
-
+		cmd.Greet(os.Args[2:])
+	case "goodbye":
+		cmd.Goodbye(os.Args[2:])
 	default:
-		fmt.Printf("Unknown command: %s\n", command)
+		fmt.Printf("Unknown command: %s\n", os.Args[1])
 
 	}
 }
