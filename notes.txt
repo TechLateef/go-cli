@@ -1,0 +1,2 @@
+Buy grocieries
+Learn Go file handling
