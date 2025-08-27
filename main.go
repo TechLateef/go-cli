@@ -34,13 +34,12 @@ func main() {
 			fmt.Println("Note added successfully")
 		}
 	case "list":
-		notes, err := cmd.ListNotes()
+		err := cmd.ListNotes()
 		if err != nil {
 			fmt.Println("Error reading notes:", err)
 			return
 		}
 		fmt.Println("Your Notes:")
-		fmt.Println(notes)
 	default:
 		fmt.Printf("Unknown command: %s\n", os.Args[1])
 

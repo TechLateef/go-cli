@@ -1,14 +1,19 @@
 package cmd
 
-import "os"
+import (
+	"time"
+)
 
-func AddNote(note string) error {
-	f, err := os.OpenFile(notesFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+func AddNote(text string) error {
+	notes, err := LoadNotes()
 	if err != nil {
 		return err
 	}
-	defer f.Close()
-
-	_, err = f.WriteString(note + "\n")
-	return err
+	newNote := Note{
+		ID:        len(text) + 1,
+		Text:      text,
+		CreatedAt: time.Now(),
+	}
+	notes = append(notes, newNote)
+	return SaveNotes(notes)
 }

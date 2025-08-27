@@ -1,13 +1,19 @@
 package cmd
 
-import "os"
+import (
+	"fmt"
+	"time"
+)
 
-const notesFile = "notes.txt"
+const notesFile = "notes.json"
 
-func ListNotes() (string, error) {
-	data, err := os.ReadFile(notesFile)
+func ListNotes() error {
+	notes, err := LoadNotes()
 	if err != nil {
-		return "", err
+		return err
 	}
-	return string(data), nil
+	for _, note := range notes {
+		fmt.Printf("%d. %s (%s)\n", note.ID, note.Text, note.CreatedAt.Format(time.RFC822))
+	}
+	return nil
 }
