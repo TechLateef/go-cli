@@ -4,9 +4,17 @@ import (
 	"fmt"
 	"go-cli-learning/cmd"
 	"os"
+	"strconv"
 	"strings"
+	"time"
 )
 
+func printMessage(msg string) {
+	for i := 0; i < 3; i++ {
+		fmt.Println(msg, i)
+		time.Sleep(500 * time.Millisecond)
+	}
+}
 func main() {
 
 	if len(os.Args) < 2 {
@@ -34,12 +42,27 @@ func main() {
 			fmt.Println("Note added successfully")
 		}
 	case "list":
+		fmt.Println("Your Notes:")
 		err := cmd.ListNotes()
 		if err != nil {
 			fmt.Println("Error reading notes:", err)
 			return
 		}
-		fmt.Println("Your Notes:")
+	case "timer":
+		if len(os.Args) < 3 {
+			fmt.Println("Please probide seconds: cli timer 5")
+			return
+		}
+		secs, err := strconv.Atoi(os.Args[2])
+		if err != nil {
+			fmt.Println("Invalid number of seconds:", os.Args[2])
+			return
+		}
+		done := make(chan bool)
+		go cmd.StartTimer(secs, done) // run timer in a goroutine
+
+		// Keep main alive until time finishes
+		<-done
 	default:
 		fmt.Printf("Unknown command: %s\n", os.Args[1])
 
